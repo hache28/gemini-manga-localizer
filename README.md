@@ -1,22 +1,21 @@
 # Gemini Manga Localizer
 
-一个完全由 `manga_localizer.html` 组成的单页工具，驱动 Gemini 模型完成漫画翻译、质检和嵌字。直接用浏览器打开即可，无需安装依赖或启动后端。
+一个完全由 `index.html` 组成的单页工具，驱动 Gemini 模型完成漫画翻译、质检和嵌字。直接用浏览器打开即可，无需安装依赖或启动后端。
 
 ## 项目结构
-- `manga_localizer.html`：包含全部 UI、逻辑和样式。
-- `qr_small.b64` 及其他 `.png/.jpg`：页面用到的静态资源。
+- `index.html`：包含全部 UI、逻辑和样式。
 - `.github/workflows/deploy.yml`：将最新代码部署到 GitHub Pages 的 CI 配置。
 
 ## 本地使用
-1. 在 Chrome/Edge 等现代浏览器中直接打开 `manga_localizer.html`。
+1. 在 Chrome/Edge 等现代浏览器中直接打开 `index.html`。
 2. 填写翻译/图像模型的 Base URL、Endpoint、API Key，上传漫画原图。
 3. 可选：导入或手动编辑术语表、补充翻译指令。
 4. 点击「开始汉化」，根据左侧日志和步骤提示完成整个流程。
 
 ## 将 Base URL / Key 写死在 HTML
-如果你想把常用的 Base URL、Endpoint 或 API Key 直接嵌入 `manga_localizer.html`，可以修改文件底部 `ENCRYPTED_*` 常量。页面会在加载时使用 `decryptValue` 将这些值解密成默认配置。
+如果你想把常用的 Base URL、Endpoint 或 API Key 直接嵌入 `index.html`，可以修改文件底部 `ENCRYPTED_*` 常量。页面会在加载时使用 `decryptValue` 将这些值解密成默认配置。
 
-1. 打开 `manga_localizer.html`，找到如下常量：
+1. 打开 `index.html`，找到如下常量：
    ```js
    const ENCRYPTED_DEFAULT_BASE_URL = "...";
    const ENCRYPTED_TRANSLATION_ENDPOINT = "...";
@@ -55,5 +54,5 @@
 4. 在仓库设置中选择 `GitHub Pages -> gh-pages` 作为发布源，即可在 `https://<用户名>.github.io/gemini-manga-localizer/` 访问。
 
 ## 备注
-- 如果仓库默认分支不是 `master`，记得同步修改 workflow 中的触发分支。
+- 如果仓库默认分支不是 `main`，记得同步修改 workflow 中的触发分支。
 - 发布前请自行补充许可证说明（例如 MIT）。
