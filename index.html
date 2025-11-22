@@ -623,6 +623,10 @@
           额外翻译需求
           <textarea id="translationInstructions" placeholder="例如：保持敬语体系、一律采用简体中文、保留角色昵称。"></textarea>
         </label>
+        <label>
+          额外嵌字 / 生图要求
+          <textarea id="imageEditInstructions" placeholder="例如：统一改成彩色、保留背景网点。"></textarea>
+        </label>
         <div class="form-group">
           <span class="field-label">术语表</span>
           <div class="table-actions">
@@ -857,6 +861,7 @@
     const targetLanguageSelect = document.getElementById("targetLanguage");
     const customLanguageInput = document.getElementById("customLanguage");
     const translationInstructionsInput = document.getElementById("translationInstructions");
+    const imageEditInstructionsInput = document.getElementById("imageEditInstructions");
     const glossaryTableBody = document.getElementById("glossaryTableBody");
     const addGlossaryRowBtn = document.getElementById("addGlossaryRowBtn");
     const importGlossaryBtn = document.getElementById("importGlossaryBtn");
@@ -1648,13 +1653,18 @@
       return prompt;
     }
 
-    function buildEditPromptText(languageName, translationText) {
-      return [
+    function buildEditPromptText(languageName, translationText, imageInstructions = "") {
+      const prompt = [
         "你是一名漫画资深嵌字。请保持原始画面、构图和所有非文字元素不变，只替换文字内容，",
         "使其与下列翻译一致。保持原字体风格、描边、颜色、排版与气泡布局，并按原始比例输出最终图像。",
-        `${languageName}翻译：`,
-        translationText
-      ].join("\n");
+        "若系统默认要求与用户附加的嵌字/生图要求存在冲突，请以用户要求为准。"
+      ];
+      if (imageInstructions) {
+        prompt.push(`用户额外要求：${imageInstructions}`);
+      }
+      prompt.push(`${languageName}翻译：`);
+      prompt.push(translationText);
+      return prompt.join("\n");
     }
 
     function buildQualityPromptText(languageName, languageCode, instructions, glossaryPairs) {
@@ -2109,6 +2119,7 @@
         languagePromptName,
         languageCode,
         translationInstructions,
+        imageInstructions,
         glossaryPairs,
         enableQualityCheck
       } = context;
@@ -2125,7 +2136,7 @@
             setStepState(STEP_INDEX.FIRST_PASS, "in-progress");
             log("生成第一轮嵌字图…");
             const firstPassPayload = buildImagePayload(
-              buildEditPromptText(languageName, state.latestTranslations),
+              buildEditPromptText(languageName, state.latestTranslations, imageInstructions),
               base64,
               mimeType,
               mediaLevel,
@@ -2194,7 +2205,7 @@
             setStepState(STEP_INDEX.FINAL, "in-progress");
             log("生成最终成品图…");
             const finalPayload = buildImagePayload(
-              buildEditPromptText(languageName, state.latestTranslations),
+              buildEditPromptText(languageName, state.latestTranslations, imageInstructions),
               base64,
               mimeType,
               mediaLevel,
@@ -2337,6 +2348,7 @@
         const languagePromptName = customLanguage || languageOption.prompt || languageName;
         const imageSize = imageSizeSelect.value || "1K";
         const translationInstructions = translationInstructionsInput.value.trim();
+        const imageInstructions = imageEditInstructionsInput.value.trim();
         const glossaryPairs = getGlossaryPairs();
         const translationPromptText = buildTranslationPromptText(languagePromptName, targetLanguage, translationInstructions, glossaryPairs);
         const enableQualityCheck = enableQualityCheckCheckbox.checked;
@@ -2354,6 +2366,7 @@
           languageCode: targetLanguage,
           imageSize,
           translationInstructions,
+          imageInstructions,
           glossaryPairs,
           enableQualityCheck
         };
