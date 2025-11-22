@@ -568,7 +568,7 @@
             <select id="imageSize">
               <option value="1K" selected>1K</option>
               <option value="2K">2K</option>
-              <!-- <option value="4K">4K（暂未开放）</option> -->
+              <option value="4K" disabled>4K（需自有 Key）</option>
             </select>
           </label>
         </div>
@@ -835,6 +835,7 @@
     const mediaLevelSelect = document.getElementById("mediaLevel");
     const thinkingLevelSelect = document.getElementById("thinkingLevel");
     const imageSizeSelect = document.getElementById("imageSize");
+    const imageSize4kOption = imageSizeSelect.querySelector('option[value="4K"]');
     const imageInput = document.getElementById("imageInput");
     const targetLanguageSelect = document.getElementById("targetLanguage");
     const customLanguageInput = document.getElementById("customLanguage");
@@ -1030,6 +1031,28 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    }
+
+    function hasCustomTranslationKey() {
+      return Boolean(translationKeyInput.value.trim());
+    }
+
+    function hasCustomImageKey() {
+      const syncKey = imageModelSyncAll.checked || imageModelSyncKey.checked;
+      if (syncKey) {
+        return hasCustomTranslationKey();
+      }
+      return Boolean(imageKeyInput.value.trim());
+    }
+
+    function updateImageSizeAvailability() {
+      if (!imageSize4kOption) return;
+      const allow4k = hasCustomImageKey();
+      imageSize4kOption.disabled = !allow4k;
+      imageSize4kOption.textContent = allow4k ? "4K" : "4K（需自有 Key）";
+      if (!allow4k && imageSizeSelect.value === "4K") {
+        imageSizeSelect.value = "2K";
+      }
     }
 
     function loadImageElement(src) {
@@ -2099,6 +2122,7 @@
       imageBaseUrlInput.classList.toggle("hidden", baseSynced);
       imageEndpointInput.classList.toggle("hidden", endpointSynced);
       imageKeyInput.classList.toggle("hidden", keySynced);
+      updateImageSizeAvailability();
     }
 
     function applyStepStates() {
@@ -2275,6 +2299,8 @@
       downloadCsv("manga_glossary.csv", csv);
       setStatus("已导出术语表 CSV。");
     });
+    translationKeyInput.addEventListener("input", updateImageSizeAvailability);
+    imageKeyInput.addEventListener("input", updateImageSizeAvailability);
     if (downloadFirstPassBtn) {
       downloadFirstPassBtn.addEventListener("click", () => {
         if (!latestFirstPassDataUrl) {
