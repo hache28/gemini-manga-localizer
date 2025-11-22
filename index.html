@@ -750,6 +750,19 @@
                 </label>
               </div>
             </div>
+            <div class="control-group">
+              <span>笔刷形状</span>
+              <div class="mode-toggle">
+                <label>
+                  <input type="radio" name="brushShape" value="square" checked />
+                  方形
+                </label>
+                <label>
+                  <input type="radio" name="brushShape" value="circle" />
+                  圆形
+                </label>
+              </div>
+            </div>
             <div class="blend-actions">
               <button type="button" class="btn secondary" id="resetMaskBtn">清空遮罩</button>
               <button type="button" class="btn" id="downloadBlendBtn">下载融合结果</button>
@@ -877,6 +890,7 @@
     const brushSizeInput = document.getElementById("brushSize");
     const brushSizeValue = document.getElementById("brushSizeValue");
     const brushModeInputs = document.querySelectorAll("input[name='brushMode']");
+    const brushShapeInputs = document.querySelectorAll("input[name='brushShape']");
     const resetMaskBtn = document.getElementById("resetMaskBtn");
     const downloadBlendBtn = document.getElementById("downloadBlendBtn");
 
@@ -1185,6 +1199,7 @@
       const rect = blendCanvas.getBoundingClientRect();
       const containerRect = blendCanvasContainer.getBoundingClientRect();
       const displaySize = getBrushDisplaySize();
+      const shape = document.querySelector("input[name='brushShape']:checked")?.value || "square";
       const relativeX = Math.min(Math.max(event.clientX - containerRect.left, 0), containerRect.width);
       const relativeY = Math.min(Math.max(event.clientY - containerRect.top, 0), containerRect.height);
       brushPreview.style.width = `${displaySize}px`;
@@ -1192,6 +1207,7 @@
       brushPreview.style.left = `${relativeX}px`;
       brushPreview.style.top = `${relativeY}px`;
       brushPreview.style.display = "block";
+      brushPreview.style.borderRadius = shape === "circle" ? "50%" : "0";
     }
 
     function hideBrushPreview() {
@@ -1202,19 +1218,44 @@
       if (!maskCtx) return;
       const ctx = maskCtx;
       const size = parseInt(brushSizeInput.value, 10) || 20;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.lineWidth = size;
-      ctx.globalCompositeOperation = currentBrushMode === "paint" ? "source-over" : "destination-out";
-      ctx.strokeStyle = "rgba(255,255,255,1)";
-      ctx.beginPath();
-      if (continueStroke && lastMaskPoint) {
-        ctx.moveTo(lastMaskPoint.x, lastMaskPoint.y);
+      const shape = document.querySelector("input[name='brushShape']:checked")?.value || "square";
+
+      const startPoint = continueStroke && lastMaskPoint ? lastMaskPoint : position;
+      const endPoint = position;
+
+      if (shape === "circle") {
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineWidth = size;
+        ctx.globalCompositeOperation = currentBrushMode === "paint" ? "source-over" : "destination-out";
+        ctx.strokeStyle = "rgba(255,255,255,1)";
+        ctx.beginPath();
+        ctx.moveTo(startPoint.x, startPoint.y);
+        ctx.lineTo(endPoint.x, endPoint.y);
+        ctx.stroke();
       } else {
-        ctx.moveTo(position.x, position.y);
+        ctx.globalCompositeOperation = currentBrushMode === "paint" ? "source-over" : "destination-out";
+        ctx.fillStyle = "rgba(255,255,255,1)";
+        const half = size / 2;
+        const drawSquare = (center) => {
+          ctx.fillRect(center.x - half, center.y - half, size, size);
+        };
+        drawSquare(startPoint);
+        if (continueStroke && lastMaskPoint) {
+          const dx = endPoint.x - startPoint.x;
+          const dy = endPoint.y - startPoint.y;
+          const dist = Math.max(Math.abs(dx), Math.abs(dy));
+          const steps = Math.max(Math.floor(dist / (size / 3)), 1);
+          for (let i = 1; i <= steps; i += 1) {
+            const t = i / steps;
+            drawSquare({
+              x: startPoint.x + dx * t,
+              y: startPoint.y + dy * t
+            });
+          }
+        }
       }
-      ctx.lineTo(position.x, position.y);
-      ctx.stroke();
+
       lastMaskPoint = { ...position };
       renderBlendCanvas();
       renderPreviewCanvas();
