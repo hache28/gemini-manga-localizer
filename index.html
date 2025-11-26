@@ -1587,7 +1587,7 @@
       properties: {
         label: {
           type: "string",
-          description: "能够精准定位文字的描述。复杂画面需包含画面编号、角色身份或特征、相对方位、文字类型（气泡/旁白/拟声词等）、字体风格与颜色等，多重信息共同确定位置；简单布局可相应简化。"
+          description: "能够精准定位文字的描述。复杂画面需包含画面编号、角色身份或特征、相对方位、文字类型（无框无底文本/文本框/旁白/拟声词等）、字体风格与颜色等，多重信息共同确定位置；简单布局可相应简化。"
         },
         style: {
           type: "string",
@@ -1638,7 +1638,7 @@
     function buildTranslationPromptText(languageName, languageCode, instructions, glossaryPairs) {
       const languageDescriptor = languageCode ? `${languageName}（ISO 639-1: ${languageCode}）` : languageName;
       let prompt = [
-        "你是一名专业的漫画翻译。阅读这张漫画图片中的所有文字（包括拟声词/音效文字），按照气泡或文本块的顺序输出翻译结果。",
+        "你是一名专业的漫画翻译。阅读这张漫画图片中的所有文字（包括拟声词/音效文字），按照文本块的顺序输出翻译结果。",
         `目标语言：${languageDescriptor}。请确保所有译文都使用该语言。`,
         "请严格输出 JSON 对象 { \"entries\": [{\"label\": \"位置描述\", \"style\": \"字体风格\", \"color\": \"颜色信息\", \"source\": \"原文\", \"target\": \"译文\"}, ...] }，不得添加任何额外字段或文字。",
         "label 必须使用能够精准定位文字的描述：复杂画面需写明画面编号、关联角色或物体、相对方位以及文字类型等；style 必须说明字体粗细、书写感、描边/阴影等风格特征；color 必须说明文字与描边/填充的颜色组合；简单布局可适当简化，但不得只写“左上角”等笼统方向。",
@@ -1657,9 +1657,9 @@
       const prompt = [
         "你是一名漫画资深嵌字。请保持原始画面、构图和所有非文字元素不变，只替换文字内容，",
         "使其与下列翻译一致。保持原字体风格、描边、颜色、排版与气泡布局，并按原始比例输出最终图像。",
-        "若系统默认要求与用户附加的嵌字/生图要求存在冲突，请以用户要求为准。"
       ];
       if (imageInstructions) {
+        prompt.push("若系统默认要求与用户附加的嵌字/生图要求存在冲突，请以用户要求为准。");
         prompt.push(`用户额外要求：${imageInstructions}`);
       }
       prompt.push(`${languageName}翻译：`);
